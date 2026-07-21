@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="A special birthday surprise crafted just for you, Akansha ❤️" />
+  <title>Happy Birthday, Akansha ❤️</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Parisienne&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════
+       AMBIENT CANVAS (petals, hearts, sparkles)
+  ══════════════════════════════════════════ -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <!-- ══════════════════════════════════════════
+       POPUP OVERLAY
+  ══════════════════════════════════════════ -->
+  <div id="popup-overlay" class="popup-overlay">
+    <div class="popup-blur-bg"></div>
+
+    <!-- Popup 1 -->
+    <div class="popup-card active" id="popup-1">
+      <div class="popup-emoji">🎉</div>
+      <h2 class="popup-heading">It's your special day!!</h2>
+      <p class="popup-sub">Yayyyyy ❤️</p>
+      <button class="popup-btn" id="popup-1-btn">Next <i class="fa fa-arrow-right"></i></button>
+    </div>
+
+    <!-- Popup 2 -->
+    <div class="popup-card" id="popup-2">
+      <div class="popup-emoji">🌸</div>
+      <h2 class="popup-heading">I wanted to make something<br />a little special...</h2>
+      <p class="popup-sub">Because you're special to me.</p>
+      <button class="popup-btn" id="popup-2-btn">Continue <i class="fa fa-heart"></i></button>
+    </div>
+
+    <!-- Popup 3 -->
+    <div class="popup-card" id="popup-3">
+      <div class="popup-emoji">✨</div>
+      <h2 class="popup-heading">Do you want to see<br />what I made?</h2>
+      <p class="popup-sub" id="popup-3-nope-msg" style="display:none; color:#FF6B9D;">Nope. You have to see it 😌</p>
+      <div class="popup-3-btns">
+        <button class="popup-btn popup-yes" id="popup-3-yes">YES <i class="fa fa-heart"></i></button>
+        <button class="popup-btn popup-no" id="popup-3-no">NO 😶</button>
+      </div>
+    </div>
+
+    <!-- Popup 4 -->
+    <div class="popup-card" id="popup-4">
+      <div class="popup-emoji">🎁</div>
+      <h2 class="popup-heading">Alright then...</h2>
+      <p class="popup-sub">Have a look at it,<br />Madam Ji ❤️</p>
+      <button class="popup-btn popup-gift-btn" id="popup-4-btn">
+        <i class="fa fa-gift"></i> Open Gift
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CAKE SOUNDTRACKS (3 tracks for cake sequence)
+  ══════════════════════════════════════════ -->
+  <!-- Track 1: Balloon burst + wish sound — plays once when cake screen appears -->
+  <audio id="cake-audio-1" preload="auto">
+    <source src="assets/cake_track1.mp3" type="audio/mpeg" />
+  </audio>
+  <!-- Track 2: Whoosh / blow sound — plays when candles are blown -->
+  <audio id="cake-audio-2" preload="auto">
+    <source src="assets/cake_track2.mp3" type="audio/mpeg" />
+  </audio>
+  <!-- Track 3: Yay / celebration music — plays at yayyy, pauses when hero section reveals -->
+  <audio id="cake-audio-3" preload="auto">
+    <source src="assets/cake_track3.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- ══════════════════════════════════════════
+       CAKE SCREEN (full-screen, shown after popup 4)
+  ══════════════════════════════════════════ -->
+  <div id="cake-screen" class="cake-screen hidden">
+    <!-- Floating sparkles container -->
+    <div id="cake-sparkle-layer" class="cake-sparkle-layer"></div>
+    <!-- Smoke particles render here -->
+    <div id="cake-smoke-layer" class="cake-smoke-layer"></div>
+
+    <!-- Header -->
+    <div class="cs-header" id="cs-header">
+      <p class="cs-title">✨ Happy 20th Birthday ✨</p>
+      <p class="cs-name">Akansha ❤️</p>
+      <div class="cs-divider"></div>
+    </div>
+
+    <!-- Cake Scene (rises from bottom) -->
+    <div class="cs-scene" id="cs-scene">
+      <!-- Click layer to make the entire scene tappable for blowing out both candles at once -->
+      <div class="cs-click-layer" id="cs-click-layer"></div>
+
+      <!-- 2 & 0 candles planted in the top tier of the cake -->
+      <div class="cs-candles-row">
+        <div class="cs-num-candle" id="candle-2" data-blown="false">
+          <div class="cs-flame-wrap">
+            <div class="cs-flame"></div>
+          </div>
+          <div class="cs-candle-body">
+            <span class="cs-candle-digit">2</span>
+          </div>
+          <div class="cs-candle-stick"></div>
+        </div>
+
+        <div class="cs-num-candle" id="candle-0" data-blown="false">
+          <div class="cs-flame-wrap">
+            <div class="cs-flame"></div>
+          </div>
+          <div class="cs-candle-body">
+            <span class="cs-candle-digit">0</span>
+          </div>
+          <div class="cs-candle-stick"></div>
+        </div>
+      </div>
+
+      <!-- Redesigned 2-Tier Premium Cake (3D style using CSS) -->
+      <div class="cs-cake" id="cs-cake">
+
+        <!-- TOP TIER (Floor 2) -->
+        <div class="cs-cake-tier cs-tier-top">
+          <!-- Top cream surface of top tier -->
+          <div class="cs-tier-surface">
+            <div class="cs-cake-cream"></div>
+            <!-- Small flowers, little hearts decoration -->
+            <div class="cs-cake-decorations">
+              <span class="cs-deco-heart" style="top: 10px; left: 20px;">❤️</span>
+              <span class="cs-deco-flower" style="top: 8px; left: 55px;">🌸</span>
+              <span class="cs-deco-flower" style="top: 8px; right: 55px;">🌸</span>
+              <span class="cs-deco-heart" style="top: 10px; right: 20px;">❤️</span>
+            </div>
+          </div>
+
+          <!-- Drips for top tier -->
+          <div class="cs-drips drips-top">
+            <span class="cs-drip dt-1"></span>
+            <span class="cs-drip dt-2"></span>
+            <span class="cs-drip dt-3"></span>
+            <span class="cs-drip dt-4"></span>
+            <span class="cs-drip dt-5"></span>
+            <span class="cs-drip dt-6"></span>
+          </div>
+
+          <!-- Cylinder body of top tier -->
+          <div class="cs-tier-body body-top">
+            <div class="cs-tier-highlight"></div>
+            <div class="cs-tier-pearls">🌸 ✨ 🌸</div>
+          </div>
+        </div>
+
+        <!-- BOTTOM TIER (Floor 1) -->
+        <div class="cs-cake-tier cs-tier-bottom">
+          <!-- Top surface of bottom tier -->
+          <div class="cs-tier-surface">
+            <div class="cs-cake-cream"></div>
+            <div class="cs-cake-decorations">
+              <span class="cs-deco-pearl" style="top: 10px; left: 35px;">✨</span>
+              <span class="cs-deco-pearl" style="top: 12px; left: 75px;">🌸</span>
+              <span class="cs-deco-pearl" style="top: 12px; right: 75px;">🌸</span>
+              <span class="cs-deco-pearl" style="top: 10px; right: 35px;">✨</span>
+            </div>
+          </div>
+
+          <!-- Drips for bottom tier -->
+          <div class="cs-drips drips-bottom">
+            <span class="cs-drip db-1"></span>
+            <span class="cs-drip db-2"></span>
+            <span class="cs-drip db-3"></span>
+            <span class="cs-drip db-4"></span>
+            <span class="cs-drip db-5"></span>
+            <span class="cs-drip db-6"></span>
+            <span class="cs-drip db-7"></span>
+            <span class="cs-drip db-8"></span>
+          </div>
+
+          <!-- Cylinder body of bottom tier -->
+          <div class="cs-tier-body body-bottom">
+            <div class="cs-tier-highlight"></div>
+            <div class="cs-cake-front-text">Akansha</div>
+          </div>
+        </div>
+
+        <!-- Cake shadow -->
+        <div class="cs-cake-shadow"></div>
+      </div>
+
+      <!-- Elegant Cake Stand -->
+      <div class="cs-cake-stand">
+        <div class="cs-stand-plate"></div>
+        <div class="cs-stand-pillar"></div>
+        <div class="cs-stand-base"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="cs-footer" id="cs-footer">
+      <p class="cs-wish-text">Make a wish...</p>
+      <p class="cs-tap-hint">Tap the candles ❤️</p>
+    </div>
+
+    <!-- Celebration Message overlay -->
+    <div class="cs-celebration hidden" id="cs-celebration">
+      <div class="cs-celebration-content">
+        <p class="celeb-sparkles">✨</p>
+        <p class="celeb-yay">Yayyyyy!!</p>
+        <p class="celeb-happy">Happy Birthday ❤️</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN SITE (hidden until cake done)
+  ══════════════════════════════════════════ -->
+  <main id="main-site" class="hidden">
+
+    <!-- ── SECTION 1: HERO ── -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-bg"></div>
+      <div class="hero-clouds">
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="cloud c3"></div>
+      </div>
+      <div class="hero-content">
+        <p class="hero-pre" id="hero-pre">✨ Today is your day ✨</p>
+        <h1 class="hero-title" id="hero-title">Happy Birthday</h1>
+        <h2 class="hero-name" id="hero-name">Akansha ❤️</h2>
+        <p class="hero-tagline" id="hero-tagline"></p>
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+      <!-- Music player toggle -->
+      <div class="music-fab" id="music-fab" title="Play music">
+        <i class="fa fa-music" id="music-fab-icon"></i>
+      </div>
+      <audio id="bg-audio" loop>
+        <source src="assets/music.mp3" type="audio/mpeg" />
+      </audio>
+    </section>
+
+    <!-- ── SECTION 2: REASONS ── -->
+    <section id="reasons" class="section reasons-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2 class="section-title">Why you're amazing</h2>
+        <p class="section-sub">Swipe through each one ❤️</p>
+      </div>
+      <div class="card-carousel-wrap">
+        <div class="card-carousel" id="reasons-carousel">
+          <!-- Cards injected by JS -->
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-btn" id="reasons-prev"><i class="fa fa-chevron-left"></i></button>
+          <div class="carousel-dots" id="reasons-dots"></div>
+          <button class="carousel-btn" id="reasons-next"><i class="fa fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: MUSIC ── -->
+    <section id="music" class="section music-section">
+
+      <!-- Section header -->
+      <div class="music-section-header" data-aos="fade-up">
+        <h2 class="section-title music-title">🎵 Songs That Always<br>Remind Me of You</h2>
+        <p class="section-sub music-sub">Every song here reminds me of you for a different reason.</p>
+      </div>
+
+      <!-- Horizontal swipe carousel -->
+      <div class="music-carousel-wrap">
+        <div class="music-carousel" id="music-carousel">
+
+          <!-- ── CARD 1 ── -->
+          <div class="music-card" data-index="0">
+            <div class="mc-album-wrap">
+              <div class="mc-album" id="mc-album-0">
+                <img src="assets/album.jpg" alt="Album Cover"
+                  onerror="this.style.background='linear-gradient(135deg,#FF6B9D,#FFB3CC)';this.style.display='flex'" />
+                <div class="mc-vinyl-hole"></div>
+              </div>
+              <div class="mc-sparkles" id="mc-sparkles-0"></div>
+            </div>
+            <div class="mc-track-info">
+              <p class="mc-song-name">Tera Hone Laga Hoon</p>
+              <p class="mc-artist">A.R. Rahman · Atif Aslam</p>
+            </div>
+            <div class="mc-player">
+              <div class="mc-progress-wrap">
+                <div class="mc-progress-bar">
+                  <div class="mc-progress-fill" id="mc-fill-0"></div>
+                </div>
+                <div class="mc-time" id="mc-time-0">0:00 / 0:00</div>
+              </div>
+              <button class="mc-play-btn" id="mc-play-0" aria-label="Play">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+            <p class="mc-note">"Every time this song plays, you come to mind."</p>
+            <a class="mc-spotify-btn" href="https://open.spotify.com/search/Tera%20Hone%20Laga%20Hoon" target="_blank"
+              rel="noopener">
+              🎧 Listen on Spotify
+            </a>
+            <audio id="mc-audio-0" preload="none">
+              <source src="assets/wishing_music.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+
+          <!-- ── CARD 2 ── -->
+          <div class="music-card" data-index="1">
+            <div class="mc-album-wrap">
+              <div class="mc-album" id="mc-album-1">
+                <img src="assets/album.jpg" alt="Album Cover"
+                  onerror="this.style.background='linear-gradient(135deg,#c471ed,#f64f59)';this.style.display='flex'" />
+                <div class="mc-vinyl-hole"></div>
+              </div>
+              <div class="mc-sparkles" id="mc-sparkles-1"></div>
+            </div>
+            <div class="mc-track-info">
+              <p class="mc-song-name">Tum Hi Ho</p>
+              <p class="mc-artist">Arijit Singh</p>
+            </div>
+            <div class="mc-player">
+              <div class="mc-progress-wrap">
+                <div class="mc-progress-bar">
+                  <div class="mc-progress-fill" id="mc-fill-1"></div>
+                </div>
+                <div class="mc-time" id="mc-time-1">0:00 / 0:00</div>
+              </div>
+              <button class="mc-play-btn" id="mc-play-1" aria-label="Play">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+            <p class="mc-note">"I don't know why, but this one has always reminded me of you."</p>
+            <a class="mc-spotify-btn" href="https://open.spotify.com/search/Tum%20Hi%20Ho%20Arijit%20Singh"
+              target="_blank" rel="noopener">
+              🎧 Listen on Spotify
+            </a>
+            <audio id="mc-audio-1" preload="none">
+              <source src="assets/wishing_music.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+
+          <!-- ── CARD 3 ── -->
+          <div class="music-card" data-index="2">
+            <div class="mc-album-wrap">
+              <div class="mc-album" id="mc-album-2">
+                <img src="assets/album.jpg" alt="Album Cover"
+                  onerror="this.style.background='linear-gradient(135deg,#f7971e,#ffd200)';this.style.display='flex'" />
+                <div class="mc-vinyl-hole"></div>
+              </div>
+              <div class="mc-sparkles" id="mc-sparkles-2"></div>
+            </div>
+            <div class="mc-track-info">
+              <p class="mc-song-name">Hawayein</p>
+              <p class="mc-artist">Arijit Singh</p>
+            </div>
+            <div class="mc-player">
+              <div class="mc-progress-wrap">
+                <div class="mc-progress-bar">
+                  <div class="mc-progress-fill" id="mc-fill-2"></div>
+                </div>
+                <div class="mc-time" id="mc-time-2">0:00 / 0:00</div>
+              </div>
+              <button class="mc-play-btn" id="mc-play-2" aria-label="Play">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+            <p class="mc-note">"This song just has the same calm feeling I associate with you."</p>
+            <a class="mc-spotify-btn" href="https://open.spotify.com/search/Hawayein%20Arijit%20Singh" target="_blank"
+              rel="noopener">
+              🎧 Listen on Spotify
+            </a>
+            <audio id="mc-audio-2" preload="none">
+              <source src="assets/wishing_music.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+
+          <!-- ── CARD 4 ── -->
+          <div class="music-card" data-index="3">
+            <div class="mc-album-wrap">
+              <div class="mc-album" id="mc-album-3">
+                <img src="assets/album.jpg" alt="Album Cover"
+                  onerror="this.style.background='linear-gradient(135deg,#11998e,#38ef7d)';this.style.display='flex'" />
+                <div class="mc-vinyl-hole"></div>
+              </div>
+              <div class="mc-sparkles" id="mc-sparkles-3"></div>
+            </div>
+            <div class="mc-track-info">
+              <p class="mc-song-name">Dil Diyan Gallan</p>
+              <p class="mc-artist">Atif Aslam</p>
+            </div>
+            <div class="mc-player">
+              <div class="mc-progress-wrap">
+                <div class="mc-progress-bar">
+                  <div class="mc-progress-fill" id="mc-fill-3"></div>
+                </div>
+                <div class="mc-time" id="mc-time-3">0:00 / 0:00</div>
+              </div>
+              <button class="mc-play-btn" id="mc-play-3" aria-label="Play">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+            <p class="mc-note">"I saved this one because it felt perfect for today."</p>
+            <a class="mc-spotify-btn" href="https://open.spotify.com/search/Dil%20Diyan%20Gallan%20Atif%20Aslam"
+              target="_blank" rel="noopener">
+              🎧 Listen on Spotify
+            </a>
+            <audio id="mc-audio-3" preload="none">
+              <source src="assets/wishing_music.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+
+          <!-- ── CARD 5 ── -->
+          <div class="music-card" data-index="4">
+            <div class="mc-album-wrap">
+              <div class="mc-album" id="mc-album-4">
+                <img src="assets/album.jpg" alt="Album Cover"
+                  onerror="this.style.background='linear-gradient(135deg,#8360c3,#2ebf91)';this.style.display='flex'" />
+                <div class="mc-vinyl-hole"></div>
+              </div>
+              <div class="mc-sparkles" id="mc-sparkles-4"></div>
+            </div>
+            <div class="mc-track-info">
+              <p class="mc-song-name">Pehli Baar</p>
+              <p class="mc-artist">Darshan Raval</p>
+            </div>
+            <div class="mc-player">
+              <div class="mc-progress-wrap">
+                <div class="mc-progress-bar">
+                  <div class="mc-progress-fill" id="mc-fill-4"></div>
+                </div>
+                <div class="mc-time" id="mc-time-4">0:00 / 0:00</div>
+              </div>
+              <button class="mc-play-btn" id="mc-play-4" aria-label="Play">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+            <p class="mc-note">"A gentle closing note — just like how I feel when you're around."</p>
+            <a class="mc-spotify-btn" href="https://open.spotify.com/search/Pehli%20Baar%20Darshan%20Raval"
+              target="_blank" rel="noopener">
+              🎧 Listen on Spotify
+            </a>
+            <audio id="mc-audio-4" preload="none">
+              <source src="assets/wishing_music.mp3" type="audio/mpeg" />
+            </audio>
+          </div>
+
+        </div><!-- /music-carousel -->
+
+        <!-- Dot indicators -->
+        <div class="mc-dots" id="mc-dots"></div>
+      </div><!-- /music-carousel-wrap -->
+
+      <!-- Scroll cue -->
+      <div class="scroll-cue music-scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>I still have a few more things to show you... ❤️</span>
+      </div>
+    </section>
+
+
+    <!-- ── SECTION 4: LOVE NOTES ── -->
+    <section id="love-notes" class="section notes-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2 class="section-title">Hidden Love Notes</h2>
+        <p class="section-sub">Tap each envelope to open 💌</p>
+      </div>
+      <div class="envelopes-grid" id="envelopes-grid">
+        <!-- Envelopes injected by JS -->
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 5: CHECKLIST ── -->
+    <section id="checklist" class="section checklist-section">
+      <div class="section-header" data-aos="fade-up">
+        <h2 class="section-title">Things I want to do<br />with you</h2>
+        <p class="section-sub">Tap to check off ❤️</p>
+      </div>
+      <div class="checklist-wrap" id="checklist-wrap">
+        <!-- Items injected by JS -->
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 6: DAYS COUNTER ── -->
+    <section id="counter" class="section counter-section">
+      <div class="counter-content" data-aos="fade-up">
+        <p class="counter-label">Since I First Saw You...</p>
+        <div class="counter-boxes">
+          <div class="counter-box">
+            <span class="counter-val" id="count-years">0</span>
+            <span class="counter-unit">Years</span>
+          </div>
+          <div class="counter-box">
+            <span class="counter-val" id="count-months">0</span>
+            <span class="counter-unit">Months</span>
+          </div>
+          <div class="counter-box">
+            <span class="counter-val" id="count-days">0</span>
+            <span class="counter-unit">Days</span>
+          </div>
+        </div>
+        <div class="counter-heart" id="counter-heart">❤️</div>
+        <p class="counter-caption" id="counter-caption">Sometimes a single person can leave a lasting impression without
+          even realizing it.</p>
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 7: FINAL LETTER ── -->
+    <section id="letter" class="section letter-section">
+      <div class="letter-paper" data-aos="fade-up">
+        <div class="letter-decoration top">🌸 ✿ 🌸</div>
+        <p class="letter-salutation">Dear Akansha,</p>
+        <div class="letter-body">
+          <p>I've been thinking about what to write here for a while. There's something about you that makes even
+            ordinary moments feel worth remembering — the way you laugh, the way you care, the way you always manage to
+            be exactly what someone needs without even trying.</p>
+          <p>I'm not great with words, but I hope this tiny corner of the internet says what I sometimes can't out loud:
+            I'm really glad you exist. I'm glad I know you. And I hope today is exactly as warm and full of love as you
+            deserve.</p>
+          <p>You've unknowingly made someone's days a lot brighter. That someone writes code at 2am to try and make you
+            smile — which either says a lot about how special you are, or a lot about how bad I am at sleeping. Probably
+            both.</p>
+          <p>I hope this year brings you every single thing you've ever quietly wished for. I hope it's full of
+            laughter, late-night conversations, good food, and all the tiny joys that add up to something beautiful.</p>
+          <p>Thank you for being you. Please never stop.</p>
+        </div>
+        <p class="letter-closing">Happy Birthday, Anku ❤️</p>
+        <div class="letter-decoration bottom">✿ 🌸 ✿</div>
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 8: FINAL GIFT ── -->
+    <section id="final-gift" class="section gift-section">
+      <div class="gift-content" data-aos="zoom-in">
+        <p class="gift-pre">One last thing...</p>
+        <div class="gift-box-wrap" id="gift-box-wrap">
+          <div class="gift-box" id="gift-box">
+            <div class="gift-lid" id="gift-lid">
+              <div class="gift-ribbon-v"></div>
+              <div class="gift-bow">
+                <div class="bow-left"></div>
+                <div class="bow-right"></div>
+                <div class="bow-center"></div>
+              </div>
+            </div>
+            <div class="gift-body">
+              <div class="gift-ribbon-h"></div>
+            </div>
+          </div>
+          <div class="gift-message hidden" id="gift-message">
+            <p>Thank you</p>
+            <p class="gift-msg-sub">for existing.</p>
+            <p class="gift-heart">❤️</p>
+            <p class="gift-msg-final">May this year bring you<br />every happiness.</p>
+            <p class="gift-msg-sign">Happy Birthday ❤️</p>
+          </div>
+        </div>
+        <button class="popup-btn gift-open-btn" id="gift-open-btn">
+          <i class="fa fa-gift"></i> Open Your Gift
+        </button>
+      </div>
+      <div class="scroll-cue">
+        <i class="fa fa-chevron-down bounce-arrow"></i>
+        <span>Swipe Down</span>
+      </div>
+    </section>
+
+    <!-- ── SECTION 9: ENDING SCREEN ── -->
+    <section id="ending" class="section ending-section">
+      <canvas id="stars-canvas"></canvas>
+
+      <!-- Phase 1: Main Message -->
+      <div class="ending-content ending-phase-1" id="ending-phase-1" data-aos="fade-up">
+        <p class="ending-small">🌸 The End?</p>
+        <h2 class="ending-title">Not Really...</h2>
+        <p class="ending-body">I just wanted to make<br />you smile today.</p>
+        <p class="ending-wish">Happy Birthday, Akansha ❤️</p>
+      </div>
+
+      <!-- Phase 2: One Last Question Card -->
+      <div class="end-card hidden" id="end-question-card">
+        <div class="end-card-emoji">😊</div>
+        <h3 class="end-card-title">Did I Make You Smile Today?</h3>
+        <p class="end-card-sub">That's all I wanted this little surprise to do.</p>
+        <div class="end-card-buttons">
+          <button class="end-btn" id="btn-smile-yes">😄 Yes, You Did</button>
+          <button class="end-btn" id="btn-smile-little">😊 A Little</button>
+        </div>
+      </div>
+
+      <!-- Phase 3: Thank You Card -->
+      <div class="end-card hidden" id="end-thankyou-card">
+        <div class="end-card-emoji heart-pulse">❤️</div>
+        <h3 class="end-card-title pink-text">Thank You</h3>
+        <p class="end-card-body">Thank you for taking the time to go through this little surprise. It genuinely means a lot to me.</p>
+        <p class="end-card-body">I hope your birthday is filled with happiness, laughter, and memories you'll always cherish.</p>
+        <p class="end-card-sign">Happy Birthday once again, Akansha. ❤️</p>
+      </div>
+
+      <!-- Phase 4: Final Replay Button -->
+      <div class="ending-final-action hidden" id="ending-final-action">
+        <button class="popup-btn replay-btn" id="replay-btn">
+          ↻ Replay Surprise
+        </button>
+      </div>
+
+      <!-- Balloons -->
+      <div class="balloons-wrap" id="balloons-wrap"></div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- AOS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <!-- Typed.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- Lenis smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+  <!-- Analytics Tracking -->
+  <script src="js/analytics.js"></script>
+  <!-- App JS -->
+  <script src="js/script.js"></script>
+</body>
+
+</html>
