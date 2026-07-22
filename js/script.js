@@ -11,44 +11,43 @@ const CONFIG = {
   // Change this to your actual start date!
   startDate: new Date(2017, 8, 7), // Feb 13, 2025 → ~523 days before July 2026
 
-  // Reasons she's amazing — customise these!
+  // Reasons she's amazing
   reasons: [
     { emoji: "❤️", text: "Because your smile fixes bad days." },
-    { emoji: "😂", text: "Because you're adorably stubborn." },
     { emoji: "🌸", text: "Because your kindness is beautiful." },
     { emoji: "✨", text: "Because you make ordinary moments feel special." },
     { emoji: "🌙", text: "Because your laugh is the best sound." },
     { emoji: "🎨", text: "Because there's a creativity in everything you do." },
-    { emoji: "💫", text: "Because you care deeply — even when no one's watching." },
     { emoji: "🌺", text: "Because your warmth is impossible to ignore." },
-    { emoji: "🍃", text: "Because you handle things with so much grace." },
     { emoji: "🌟", text: "Because you're genuinely rare." },
-    { emoji: "💝", text: "Because you make people feel seen." },
-    { emoji: "☕", text: "Because even your bad moods are somehow endearing." },
     { emoji: "🌈", text: "Because you bring colour to grey days." },
-    { emoji: "🦋", text: "Because you've grown so beautifully." },
     { emoji: "🎀", text: "Because the world is genuinely better with you in it." },
+    { emoji: "🦋", text: "Because you are entirely unique there is nobody else exactly like you." },
+    { emoji: "💖", text: "Because you are beautifully messy and perfectly human." },
+    { emoji: "👂", text: "Because you are a fantastic listener." },
+    { emoji: "✨", text: "Because you have a magnetic personality that draws people in." },
+    { emoji: "🍳", text: "Because you can cook a favorite dish or have a signature way you do things." },
+    { emoji: "👑", text: "Because you are the main character of your amazing story." },
   ],
 
-  // Love notes — 6 envelopes
+  // Little Notes for You
   loveNotes: [
-    { emoji: "💌", text: "Hope today becomes one of your happiest memories." },
-    { emoji: "🌸", text: "Thank you for simply existing. You make the world softer." },
-    { emoji: "✨", text: "Never stop smiling. It's genuinely one of the best things." },
-    { emoji: "💝", text: "I'm really glad today happened. And every day with you." },
-    { emoji: "🌙", text: "You deserve every beautiful thing this year has to offer." },
-    { emoji: "🎀", text: "Here's to you — the most wonderful Madam Ji ❤️" },
+    { emoji: "💌", text: "If I could gift you one thing today, it would be the ability to see yourself the way I do." },
+    { emoji: "🌸", text: "The world became a little brighter the day you were born." },
+    { emoji: "✨", text: "I hope life always gives you reasons to smile." },
+    { emoji: "💝", text: "Some songs, sunsets, and little moments somehow end up reminding me of you." },
+    { emoji: "🌙", text: "I don't know if you'll remember this website years from now, but I hope it made you smile today." },
+    { emoji: "🎀", text: "Thank you for opening every little note. Happy Birthday, Akansha. Stay exactly the wonderful person you are. ❤️" },
   ],
 
-  // Checklist items
   checklistItems: [
-    { emoji: "🌅", text: "Watch sunsets" },
-    { emoji: "🍦", text: "Eat ice cream" },
-    { emoji: "🚶‍♀️", text: "Go on long walks" },
-    { emoji: "😂", text: "Laugh over silly things" },
-    { emoji: "🎂", text: "Celebrate many birthdays" },
-    { emoji: "🎬", text: "Watch movies until 3am" },
-    { emoji: "☕", text: "Share chai and conversations" },
+    { emoji: "🌍", text: "Travel the world with you." },
+    { emoji: "🪂", text: "Go skydiving together." },
+    { emoji: "🌊", text: "Watch the waves, explore the sea, and make memories." },
+    { emoji: "🎂", text: "Celebrate your birthday together someday." },
+    { emoji: "🌅", text: "Watch countless sunsets side by side." },
+    { emoji: "🎬", text: "Spend movie nights filled with laughter." },
+    { emoji: "🚶‍♂️", text: "Walk for miles with endless conversations." },
   ],
 };
 
@@ -837,7 +836,7 @@ function initMusicPlayer() {
 
   function goToMusicCard(idx) {
     idx = (idx + CARD_COUNT) % CARD_COUNT;
-    
+
     if (idx !== currentMusicIdx && window.trackEvent) {
       const targetCard = cards[idx];
       const songName = targetCard?.querySelector('.mc-song-name')?.textContent || 'Unknown';
@@ -1117,7 +1116,7 @@ function buildChecklist() {
 
     el.addEventListener('click', () => {
       el.classList.toggle('checked');
-      
+
       // Track checklist item clicks
       if (window.trackEvent) {
         window.trackEvent({
