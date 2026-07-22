@@ -1439,7 +1439,7 @@ function initScrollTriggerAnimations() {
     { id: 'hero', name: 'Welcome Hero' },
     { id: 'reasons', name: 'Why You Are Amazing' },
     { id: 'music', name: 'Music Playlist' },
-    { id: 'notes', name: 'Love Notes' },
+    { id: 'love-notes', name: 'Love Notes' },
     { id: 'checklist', name: 'Surprise Checklist' },
     { id: 'counter', name: 'Days Counter' },
     { id: 'letter', name: 'Final Letter' },
